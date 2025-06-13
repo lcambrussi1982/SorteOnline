@@ -45,6 +45,7 @@ h1 {
   font-size: 1.8rem;
   font-weight: 700;
   text-shadow: 1px 1px 3px var(--texto-escuro);
+  align-items: center;
 }
 
 main {
