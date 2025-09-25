@@ -1,186 +1,352 @@
-/* Variáveis de cores místicas/spirituais suaves */
+/* =========================================================
+   Tema místico — Design Tokens e Fundamentos
+   (mantém suas variáveis originais e adiciona semânticas)
+   ========================================================= */
 :root {
-  --roxo-escuro: #5A3D9A;      /* um pouco mais suave que #4B2E83 */
-  --lilas-claro: #D4B6D4;      /* lilás mais clarinho e suave que #C8A2C8 */
-  --dourado: #D9BB4A;          /* dourado mais suave que #D4AF37 */
-  --lilas-bem-claro: #F3EAF7;  /* tom quase branco lilás */
-  --texto-escuro: #4A3B6F;     /* tom escuro para texto, menos intenso que #3b2f5a */
+  /* Paleta original do usuário */
+  --roxo-escuro: #5A3D9A;
+  --lilas-claro: #D4B6D4;
+  --dourado: #D9BB4A;
+  --lilas-bem-claro: #F3EAF7;
+  --texto-escuro: #4A3B6F;
   --sombra-roxo: rgba(90, 61, 154, 0.3);
   --sombra-dourado: rgba(217, 187, 74, 0.5);
-  --fundo-quase-branco: #FAF8FC; 
+  --fundo-quase-branco: #FAF8FC;
+
+  /* Tokens semânticos */
+  --bg: linear-gradient(145deg, #efe7f6 0%, #f9f6ff 50%, #f4eefb 100%);
+  --surface: #ffffffcc;
+  --surface-2: #ffffffb3;
+  --ink: #3f2d66;     /* texto principal */
+  --ink-weak: #5b4a82;/* texto secundário */
+  --primary: var(--roxo-escuro);
+  --primary-700: #4a2f86;
+  --accent: var(--dourado);
+  --accent-600: #c5a73d;
+  --border: #e8def8;
+  --radius: 14px;
+  --radius-sm: 10px;
+
+  /* Sombra & blur */
+  --shadow-1: 0 2px 10px var(--sombra-roxo);
+  --shadow-2: 0 10px 30px var(--sombra-roxo);
+  --glow: 0 0 0 3px color-mix(in oklab, var(--accent) 40%, white 60%);
+
+  /* Espaços & tempo (motion) */
+  --sp-1: .5rem; --sp-2: .75rem; --sp-3: 1rem; --sp-4: 1.5rem; --sp-5: 2rem;
+  --dur-fast: 120ms; --dur: 220ms; --dur-slow: 420ms;
+  --easing: cubic-bezier(.2,.7,.2,1);
 }
 
-* {
-  box-sizing: border-box;
+/* Dark mode automático (ajuste sutil para contraste) */
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg: radial-gradient(1200px 600px at 10% -10%, #2a1f42 0%, transparent 60%),
+          radial-gradient(1000px 500px at 120% 10%, #3d2b64 0%, transparent 60%),
+          linear-gradient(180deg, #1d1630 0%, #1a142b 100%);
+    --surface: #2b2145cc;
+    --surface-2: #2b2145b3;
+    --ink: #f4f0ff;
+    --ink-weak: #d6cff0;
+    --border: #4a3c70;
+    --primary: #7e62d9;
+    --primary-700: #7057c2;
+    --accent: #e6c85a;
+    --accent-600: #d2b54f;
+    --sombra-roxo: rgba(0,0,0,.35);
+    --sombra-dourado: rgba(230, 200, 90, .35);
+  }
 }
 
+/* Acessibilidade: reduzir movimento */
+@media (prefers-reduced-motion: reduce) {
+  :root { --dur-fast: 0ms; --dur: 0ms; --dur-slow: 0ms; }
+}
+
+/* Reset leve e base tipográfica */
+* { box-sizing: border-box; }
+html { scroll-behavior: smooth; }
 body {
-  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
   margin: 0;
-  background: var(--lilas-claro);
-  color: var(--texto-escuro);
-  display: flex;
-  flex-direction: column;
   min-height: 100vh;
+  display: flex; flex-direction: column;
+  font-family: system-ui, -apple-system, "Segoe UI", Roboto, Inter, "Helvetica Neue", Arial, "Noto Sans", "Apple Color Emoji","Segoe UI Emoji", "Segoe UI Symbol", sans-serif;
+  background: var(--bg);
+  color: var(--ink);
 }
 
-header {
-  background-color: var(--roxo-escuro);
-  color: var(--dourado);
-  padding: 1rem;
-  display: flex;
-  align-items: center;
-  gap: 1rem;
+/* =========================================================
+   Header — com brilho sutil e layout flex
+   ========================================================= */
+header,
+.site-header {
+  position: sticky; top: 0; z-index: 20;
+  backdrop-filter: saturate(135%) blur(8px);
+  background: linear-gradient(180deg, color-mix(in oklab, var(--primary) 22%, transparent 78%), transparent),
+              color-mix(in oklab, var(--surface) 95%, white 5%);
+  color: var(--accent);
+  border-bottom: 1px solid var(--border);
+  box-shadow: var(--shadow-1);
+  padding: var(--sp-3);
+  display: flex; align-items: center; gap: var(--sp-3);
 }
 
 .logo {
-  width: 50px;
-  height: 50px;
-  object-fit: contain;
-  filter: drop-shadow(0 0 3px var(--dourado));
-}
-
-h1 {
-  margin: 0;
-  font-size: 1.8rem;
-  font-weight: 700;
-  text-shadow: 1px 1px 3px var(--texto-escuro);
-  align-items: center;
-}
-
-main {
-  flex-grow: 1;
-  padding: 2rem;
-  max-width: 900px;
-  margin: 0 auto;
-  background: var(--lilas-bem-claro);
+  width: 56px; height: 56px; object-fit: contain;
+  filter: drop-shadow(0 2px 6px var(--sombra-dourado));
   border-radius: 12px;
-  box-shadow: 0 0 20px var(--sombra-roxo);
+}
+
+h1, .site-title {
+  margin: 0;
+  font-size: clamp(1.25rem, 2vw, 1.8rem);
+  font-weight: 800;
+  letter-spacing: .2px;
+  color: color-mix(in oklab, var(--accent) 88%, white 12%);
+  text-shadow: 0 0 18px color-mix(in oklab, var(--accent) 45%, transparent 55%);
+}
+
+/* Subtítulo opcional (HTML melhorado que sugeri) */
+.site-subtitle { margin: 0; color: var(--ink-weak); font-weight: 600; }
+
+/* Skip link acessível */
+.skip-to-content{
+  position: absolute; left: -9999px; top: auto; width: 1px; height:1px; overflow:hidden;
+}
+.skip-to-content:focus{
+  left: var(--sp-3); top: var(--sp-3); width:auto; height:auto; padding:.6rem 1rem;
+  background: var(--surface); color: var(--primary); border-radius: var(--radius-sm);
+  box-shadow: var(--glow);
+}
+
+/* =========================================================
+   Main container
+   ========================================================= */
+main, .container {
+  flex: 1;
+  width: 100%;
+  max-width: 1024px;
+  margin: var(--sp-5) auto;
+  padding: clamp(1rem, 2vw, 2rem);
+  background: linear-gradient(180deg, var(--surface), var(--surface-2));
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow-2);
 }
 
 h2 {
   text-align: center;
-  margin-bottom: 2rem;
-  color: var(--roxo-escuro);
+  margin: 0 0 var(--sp-4);
+  color: var(--primary);
+  font-weight: 800;
+  letter-spacing: .3px;
+}
+
+/* Texto auxiliar opcional */
+.helper-text{
+  text-align: center;
+  margin: -0.75rem 0 var(--sp-4);
+  color: var(--ink-weak);
   font-weight: 600;
 }
 
+/* =========================================================
+   Mesa de cartas — agora em GRID responsivo
+   ========================================================= */
 #mesa {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 1rem;
-  justify-content: center;
-  margin-bottom: 1.5rem;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(110px, 1fr));
+  gap: clamp(.75rem, 1.6vw, 1rem);
+  justify-items: center;
+  align-items: stretch;
+  margin-bottom: var(--sp-4);
+  perspective: 1200px;
 }
 
+/* Carta — 3D polido, acessível e responsivo */
 .carta {
-  width: 100px;
-  height: 140px;
-  perspective: 1000px;
+  width: 100%;
+  max-width: 140px;
+  aspect-ratio: 5 / 7; /* 100x140 */
   cursor: pointer;
-  border-radius: 10px;
-  box-shadow: 0 3px 8px var(--sombra-roxo);
-  transition: box-shadow 0.3s ease;
+  border-radius: var(--radius-sm);
+  box-shadow: var(--shadow-1);
+  position: relative;
+  transform-style: preserve-3d;
+  transition: transform var(--dur) var(--easing), box-shadow var(--dur) var(--easing), filter var(--dur) var(--easing);
+  will-change: transform, box-shadow, filter;
+  outline: none;
+  background: transparent;
 }
-
 .carta:hover {
-  box-shadow: 0 6px 15px var(--dourado);
+  transform: translateY(-3px) rotateX(2deg) rotateY(-2deg);
+  box-shadow: 0 14px 30px var(--sombra-roxo);
+  filter: saturate(1.02);
+}
+.carta:active { transform: translateY(0) scale(.98); }
+.carta:focus-visible {
+  box-shadow: var(--glow), 0 10px 26px var(--sombra-roxo);
 }
 
+/* Núcleo da animação de flip */
 .carta-inner {
   position: relative;
-  width: 100%;
-  height: 100%;
-  transition: transform 0.6s;
+  inset: 0;
+  width: 100%; height: 100%;
   transform-style: preserve-3d;
-  border-radius: 10px;
+  transition: transform var(--dur-slow) var(--easing);
+  border-radius: inherit;
 }
 
-.carta.virada .carta-inner {
-  transform: rotateY(180deg);
-}
+.carta.virada .carta-inner { transform: rotateY(180deg); }
 
+/* Faces */
 .carta-frente, .carta-verso {
   position: absolute;
-  width: 100%;
-  height: 100%;
-  border-radius: 10px;
+  inset: 0;
+  border-radius: inherit;
   backface-visibility: hidden;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  font-weight: bold;
-  font-size: 1rem;
-  padding: 0.5rem;
-  box-shadow: inset 0 0 10px var(--sombra-dourado);
+  display: grid; place-items: center;
+  font-weight: 700;
+  padding: .6rem;
+  border: 1px solid var(--border);
+  box-shadow: inset 0 0 0 1px color-mix(in oklab, var(--primary) 10%, transparent 90%),
+              inset 0 0 18px color-mix(in oklab, var(--accent) 20%, transparent 80%),
+              0 1px 0 color-mix(in oklab, #fff 70%, transparent 30%);
 }
 
+/* Frente revelada */
 .carta-frente {
-  background-color: var(--lilas-bem-claro);
-  color: var(--roxo-escuro);
+  background:
+    radial-gradient(140% 90% at 100% 0%, color-mix(in oklab, var(--lilas-bem-claro) 80%, white 20%), transparent 70%),
+    linear-gradient(180deg, color-mix(in oklab, #fff 85%, var(--lilas-bem-claro) 15%), #fff);
+  color: var(--primary);
   transform: rotateY(180deg);
   text-align: center;
-  font-weight: 600;
-  text-shadow: 0 0 3px var(--dourado);
+  text-shadow: 0 0 10px color-mix(in oklab, var(--accent) 35%, transparent 65%);
+  font-size: clamp(.95rem, 1.4vw, 1.05rem);
 }
 
+/* Verso (carta fechada) */
 .carta-verso {
-  background-color: var(--roxo-escuro);
-  color: var(--dourado);
-  font-size: 2.5rem;
-  box-shadow: 0 0 10px var(--dourado);
+  background:
+    conic-gradient(from 45deg at 50% 50%, color-mix(in oklab, var(--primary) 78%, #000 0%) 0 25%,
+                   color-mix(in oklab, var(--primary-700) 78%, #000 0%) 0 50%,
+                   color-mix(in oklab, var(--primary) 78%, #000 0%) 0 75%,
+                   color-mix(in oklab, var(--primary-700) 78%, #000 0%) 0 100%),
+    radial-gradient(80% 60% at 50% 30%, color-mix(in oklab, var(--accent) 20%, transparent 80%), transparent 60%);
+  color: var(--accent);
+  font-size: clamp(1.6rem, 3.6vw, 2.4rem);
+  letter-spacing: 1px;
 }
 
+/* Efeito de brilho sutil no hover */
+.carta:hover .carta-verso::after {
+  content: "";
+  position: absolute; inset: 0;
+  border-radius: inherit;
+  background: linear-gradient(120deg, transparent 30%, color-mix(in oklab, #fff 60%, var(--accent) 40%) 45%, transparent 60%);
+  mix-blend-mode: overlay;
+  opacity: .35;
+  transition: opacity var(--dur) var(--easing);
+}
+
+/* =========================================================
+   Resultado — cartão com destaque e animação de entrada
+   ========================================================= */
 #resultado {
-  background: var(--fundo-quase-branco);
-  border-radius: 10px;
-  padding: 1rem 1.5rem;
-  box-shadow: 0 3px 7px var(--sombra-roxo);
-  max-width: 600px;
+  background: linear-gradient(180deg, var(--surface), var(--surface-2));
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  padding: var(--sp-4);
+  box-shadow: var(--shadow-1);
+  max-width: min(720px, 100%);
   margin: 0 auto;
-  color: var(--roxo-escuro);
-  font-weight: 500;
+  color: var(--ink);
+  font-weight: 550;
+  animation: fadeInUp var(--dur-slow) var(--easing) both;
 }
-
 #resultado h3 {
-  margin-top: 0;
-  color: var(--roxo-escuro);
-  font-weight: 700;
+  margin: 0 0 var(--sp-2);
+  color: var(--primary);
+  font-weight: 800;
   text-align: center;
-  text-shadow: 0 0 4px var(--dourado);
+  text-shadow: 0 0 12px color-mix(in oklab, var(--accent) 30%, transparent 70%);
 }
+#resultado p { margin: .45rem 0; line-height: 1.6; }
 
-#resultado p {
-  margin: 0.5rem 0;
-  line-height: 1.4;
-}
-
+/* =========================================================
+   Botão Reiniciar — estilo premium com estados
+   ========================================================= */
 #btn-reiniciar {
   display: block;
-  margin: 1rem auto 2rem;
-  padding: 0.7rem 1.5rem;
-  background-color: var(--dourado);
-  color: var(--roxo-escuro);
-  font-size: 1.1rem;
+  margin: var(--sp-4) auto var(--sp-5);
+  padding: .8rem 1.4rem;
+  background:
+    linear-gradient(180deg, color-mix(in oklab, var(--accent) 90%, white 10%),
+                           color-mix(in oklab, var(--accent-600) 90%, white 10%));
+  color: #3a2c0a;
+  font-size: 1.05rem;
   border: none;
-  border-radius: 8px;
+  border-radius: 999px;
   cursor: pointer;
-  font-weight: 700;
-  box-shadow: 0 0 10px var(--dourado);
-  transition: background-color 0.3s, color 0.3s;
+  font-weight: 800;
+  letter-spacing: .3px;
+  box-shadow: 0 8px 24px var(--sombra-dourado);
+  transition: transform var(--dur) var(--easing), box-shadow var(--dur) var(--easing), filter var(--dur) var(--easing);
 }
-
 #btn-reiniciar:hover {
-  background-color: #bfa42b;
-  color: var(--lilas-bem-claro);
-  box-shadow: 0 0 14px #bfa42b;
+  transform: translateY(-2px);
+  box-shadow: 0 14px 32px var(--sombra-dourado);
+  filter: brightness(1.02);
+}
+#btn-reiniciar:active { transform: translateY(0) scale(.98); }
+#btn-reiniciar:focus-visible { outline: none; box-shadow: var(--glow), 0 8px 24px var(--sombra-dourado); }
+
+/* Quando está oculto pelo JS, mantenha acessível para leitores se necessário */
+#btn-reiniciar[style*="display:none"] { visibility: hidden; }
+
+/* =========================================================
+   Footer — discreto e elegante
+   ========================================================= */
+footer {
+  background: color-mix(in oklab, var(--primary) 18%, #ffffff 82%);
+  color: color-mix(in oklab, var(--ink) 80%, #000 20%);
+  text-align: center;
+  padding: var(--sp-3);
+  font-size: .95rem;
+  font-weight: 700;
+  border-top: 1px solid var(--border);
+  box-shadow: inset 0 1px 0 #ffffff40;
 }
 
-footer {
-  background-color: var(--roxo-escuro);
-  color: var(--dourado);
-  text-align: center;
-  padding: 1rem;
-  font-size: 0.9rem;
-  font-weight: 600;
+/* =========================================================
+   Utilitários
+   ========================================================= */
+.visually-hidden {
+  position: absolute !important;
+  height: 1px; width: 1px;
+  overflow: hidden; clip: rect(1px, 1px, 1px, 1px);
+  white-space: nowrap; clip-path: inset(50%); border: 0; padding: 0; margin: -1px;
 }
+
+/* Seleção de texto personalizada */
+::selection { background: color-mix(in oklab, var(--accent) 40%, #000 60%); color: white; }
+
+/* Animações */
+@keyframes fadeInUp {
+  from { opacity: 0; transform: translateY(8px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* =========================================================
+   Compat — mantém estilos legados que você já tinha
+   (Ajustados para combinar com o novo visual)
+   ========================================================= */
+h1 { align-items: center; }
+h2 { color: var(--primary); }
+.carta:hover { box-shadow: 0 14px 30px var(--sombra-roxo); }
+.carta-frente, .carta-verso { box-shadow: inset 0 0 10px var(--sombra-dourado); }
+
+/* Melhora contraste no tema claro original */
+body:not(:has(main)), body:has(main) { color: var(--ink); }
