@@ -1,34 +1,110 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
-
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Leitura do Baralho Cigano</title>
+
+  <title>Leitura do Baralho Cigano — Astrólogo Leandro</title>
+  <meta name="description" content="Escolha 3 cartas do Baralho Cigano e receba sua leitura personalizada com interpretações claras e objetivas." />
+  <meta name="author" content="Astrólogo Leandro" />
+  <meta name="theme-color" content="#0f172a" />
+  <meta name="color-scheme" content="light dark" />
+
+  <!-- SEO/social -->
+  <meta property="og:title" content="Leitura do Baralho Cigano — Astrólogo Leandro" />
+  <meta property="og:description" content="Selecione 3 cartas para revelar sua leitura." />
+  <meta property="og:type" content="website" />
+  <meta property="og:image" content="og-image.png" />
+  <meta name="twitter:card" content="summary_large_image" />
+
+  <!-- Ícones -->
+  <link rel="icon" href="favicon.ico" />
+  <link rel="apple-touch-icon" href="apple-touch-icon.png" />
+
+  <!-- Fontes (opcional; remova se preferir apenas fontes do sistema) -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet" />
+
+  <!-- CSS principal -->
   <link rel="stylesheet" href="styles.css" />
 </head>
 
 <body>
-  <header>
-    <img src="logo.png" alt="Logo" class="logo" />
-    <h1>Astrólogo Leandro - Baralho Cigano</h1>
+  <!-- Link de pulo para acessibilidade -->
+  <a class="skip-to-content" href="#conteudo">Pular para o conteúdo</a>
+
+  <header class="site-header" role="banner">
+    <div class="brand">
+      <img src="logo.png" alt="Logotipo Astrólogo Leandro" class="logo" />
+      <div class="brand-text">
+        <h1 class="site-title">Astrólogo Leandro</h1>
+        <p class="site-subtitle">Leitura do Baralho Cigano</p>
+      </div>
+    </div>
+
+    <!-- Espaço para ações futuras: tema, ajuda, etc. (não quebra o JS existente) -->
+    <nav class="site-actions" aria-label="Ações rápidas">
+      <!-- Botão opcional de tema (adicione JS depois, se quiser) -->
+      <!-- <button id="btn-tema" type="button" aria-pressed="false" title="Alternar tema">🌗</button> -->
+    </nav>
   </header>
 
-  <main>
-    <h2>Escolha 3 cartas para revelar sua leitura</h2>
-    <div id="mesa"></div>
+  <main id="conteudo" class="container" role="main">
+    <section class="intro" aria-labelledby="titulo-principal">
+      <h2 id="titulo-principal">Escolha 3 cartas para revelar sua leitura</h2>
+      <p class="helper-text">
+        Toque ou clique nas cartas para selecionar. Ao escolher 3, revelaremos sua interpretação.
+      </p>
+    </section>
 
-    <button id="btn-reiniciar" style="display:none;">Jogar Novamente</button>
+    <section class="mesa-wrapper" aria-labelledby="titulo-mesa">
+      <h3 id="titulo-mesa" class="visually-hidden">Mesa de cartas</h3>
+      <!-- Mantido o mesmo ID para compatibilidade com seu script -->
+      <div id="mesa" class="mesa" role="group" aria-label="Mesa de cartas: selecione três cartas"></div>
 
-    <div id="resultado"></div>
+      <!-- Botão mantido com o mesmo ID; apenas melhoramos a acessibilidade -->
+      <div class="actions">
+        <button
+          id="btn-reiniciar"
+          type="button"
+          style="display:none;"
+          aria-hidden="true"
+          aria-label="Jogar novamente e embaralhar as cartas"
+        >
+          Jogar Novamente
+        </button>
+      </div>
+    </section>
+
+    <section class="resultado-wrapper" aria-labelledby="titulo-resultado">
+      <h3 id="titulo-resultado">Resultado</h3>
+      <!-- Mantido o mesmo ID; agora com ARIA para leitores de tela anunciarem mudanças -->
+      <div id="resultado" class="resultado" role="status" aria-live="polite" aria-atomic="true"></div>
+      <noscript>
+        <p>Ative o JavaScript para visualizar a leitura das cartas.</p>
+      </noscript>
+    </section>
   </main>
 
-  <footer>
+  <footer class="site-footer" role="contentinfo">
     <p>&copy; 2025 Leitura Cigana. Todos os direitos reservados.</p>
   </footer>
 
-  <script src="baralho.js"></script>
-  <script src="script.js"></script>
-</body>
+  <!-- Scripts (usar defer evita bloquear o carregamento e mantém a ordem necessária) -->
+  <script src="baralho.js" defer></script>
+  <script src="script.js" defer></script>
 
+  <!-- Dados estruturados mínimos para SEO -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "Person",
+    "name": "Astrólogo Leandro",
+    "jobTitle": "Astrólogo",
+    "image": "logo.png",
+    "url": ""
+  }
+  </script>
+</body>
 </html>
