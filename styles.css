@@ -1,352 +1,212 @@
 /* =========================================================
-   Tema místico — Design Tokens e Fundamentos
-   (mantém suas variáveis originais e adiciona semânticas)
+   Tema místico — Tokens
    ========================================================= */
-:root {
-  /* Paleta original do usuário */
-  --roxo-escuro: #5A3D9A;
-  --lilas-claro: #D4B6D4;
-  --dourado: #D9BB4A;
-  --lilas-bem-claro: #F3EAF7;
-  --texto-escuro: #4A3B6F;
-  --sombra-roxo: rgba(90, 61, 154, 0.3);
-  --sombra-dourado: rgba(217, 187, 74, 0.5);
-  --fundo-quase-branco: #FAF8FC;
-
-  /* Tokens semânticos */
-  --bg: linear-gradient(145deg, #efe7f6 0%, #f9f6ff 50%, #f4eefb 100%);
-  --surface: #ffffffcc;
-  --surface-2: #ffffffb3;
-  --ink: #3f2d66;     /* texto principal */
-  --ink-weak: #5b4a82;/* texto secundário */
-  --primary: var(--roxo-escuro);
-  --primary-700: #4a2f86;
-  --accent: var(--dourado);
-  --accent-600: #c5a73d;
-  --border: #e8def8;
-  --radius: 14px;
-  --radius-sm: 10px;
-
-  /* Sombra & blur */
-  --shadow-1: 0 2px 10px var(--sombra-roxo);
-  --shadow-2: 0 10px 30px var(--sombra-roxo);
-  --glow: 0 0 0 3px color-mix(in oklab, var(--accent) 40%, white 60%);
-
-  /* Espaços & tempo (motion) */
-  --sp-1: .5rem; --sp-2: .75rem; --sp-3: 1rem; --sp-4: 1.5rem; --sp-5: 2rem;
-  --dur-fast: 120ms; --dur: 220ms; --dur-slow: 420ms;
-  --easing: cubic-bezier(.2,.7,.2,1);
+:root{
+  --roxo-escuro:#5A3D9A;
+  --roxo-700:#4a2f86;
+  --lilas-claro:#D4B6D4;
+  --lilas-bem-claro:#F3EAF7;
+  --dourado:#D9BB4A;
+  --dourado-600:#c9ad3d;
+  --ink:#3f2d66;
+  --ink-weak:#5b4a82;
+  --border:#e6ddf6;
+  --shadow:0 10px 30px rgba(90,61,154,.28);
+  --glow:0 0 0 3px color-mix(in oklab, var(--dourado) 42%, white 58%);
+  --radius:14px; --radius-sm:10px;
+  --sp-1:.5rem; --sp-2:.75rem; --sp-3:1rem; --sp-4:1.5rem; --sp-5:2rem;
+  --dur-1:120ms; --dur-2:220ms; --dur-3:420ms;
+  --ease:cubic-bezier(.2,.7,.2,1);
+  --bg: radial-gradient(1200px 600px at 10% -10%, #efe7f6 0%, transparent 60%),
+        radial-gradient(1000px 500px at 120% 10%, #f4ecff 0%, transparent 60%),
+        linear-gradient(180deg,#f7f2fd 0%,#fbf9ff 100%);
 }
-
-/* Dark mode automático (ajuste sutil para contraste) */
-@media (prefers-color-scheme: dark) {
-  :root {
+@media (prefers-color-scheme: dark){
+  :root{
     --bg: radial-gradient(1200px 600px at 10% -10%, #2a1f42 0%, transparent 60%),
           radial-gradient(1000px 500px at 120% 10%, #3d2b64 0%, transparent 60%),
-          linear-gradient(180deg, #1d1630 0%, #1a142b 100%);
-    --surface: #2b2145cc;
-    --surface-2: #2b2145b3;
-    --ink: #f4f0ff;
-    --ink-weak: #d6cff0;
-    --border: #4a3c70;
-    --primary: #7e62d9;
-    --primary-700: #7057c2;
-    --accent: #e6c85a;
-    --accent-600: #d2b54f;
-    --sombra-roxo: rgba(0,0,0,.35);
-    --sombra-dourado: rgba(230, 200, 90, .35);
+          linear-gradient(180deg,#1d1630 0%,#1a142b 100%);
+    --border:#4a3c70;
+    --ink:#f2edff; --ink-weak:#d7cff0;
+    --roxo-escuro:#7e62d9; --roxo-700:#7057c2;
+    --dourado:#e6c85a; --dourado-600:#d2b54f;
+    --shadow:0 12px 34px rgba(0,0,0,.35);
   }
 }
-
-/* Acessibilidade: reduzir movimento */
-@media (prefers-reduced-motion: reduce) {
-  :root { --dur-fast: 0ms; --dur: 0ms; --dur-slow: 0ms; }
+@media (prefers-reduced-motion: reduce){
+  :root{ --dur-1:0ms; --dur-2:0ms; --dur-3:0ms; }
 }
 
-/* Reset leve e base tipográfica */
-* { box-sizing: border-box; }
-html { scroll-behavior: smooth; }
-body {
-  margin: 0;
-  min-height: 100vh;
-  display: flex; flex-direction: column;
-  font-family: system-ui, -apple-system, "Segoe UI", Roboto, Inter, "Helvetica Neue", Arial, "Noto Sans", "Apple Color Emoji","Segoe UI Emoji", "Segoe UI Symbol", sans-serif;
-  background: var(--bg);
-  color: var(--ink);
+/* Base */
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{
+  margin:0; min-height:100vh; display:flex; flex-direction:column;
+  font-family:system-ui, "Segoe UI", Inter, Roboto, Arial, sans-serif;
+  background:var(--bg); color:var(--ink);
 }
 
-/* =========================================================
-   Header — com brilho sutil e layout flex
-   ========================================================= */
-header,
-.site-header {
-  position: sticky; top: 0; z-index: 20;
-  backdrop-filter: saturate(135%) blur(8px);
-  background: linear-gradient(180deg, color-mix(in oklab, var(--primary) 22%, transparent 78%), transparent),
-              color-mix(in oklab, var(--surface) 95%, white 5%);
-  color: var(--accent);
-  border-bottom: 1px solid var(--border);
-  box-shadow: var(--shadow-1);
-  padding: var(--sp-3);
-  display: flex; align-items: center; gap: var(--sp-3);
+/* Container principal (seu <main>) */
+main{
+  flex:1; width:100%; max-width:1024px; margin:var(--sp-5) auto;
+  padding:clamp(1rem,2vw,2rem);
+  background:linear-gradient(180deg, #ffffffcc, #ffffffb3);
+  backdrop-filter:saturate(120%) blur(6px);
+  border:1px solid var(--border);
+  border-radius:var(--radius);
+  box-shadow:var(--shadow);
 }
 
-.logo {
-  width: 56px; height: 56px; object-fit: contain;
-  filter: drop-shadow(0 2px 6px var(--sombra-dourado));
-  border-radius: 12px;
+/* Títulos */
+h1,h2,h3{margin:0 0 var(--sp-3)}
+h2{
+  text-align:center; color:var(--roxo-escuro);
+  letter-spacing:.3px; font-weight:800;
 }
 
-h1, .site-title {
-  margin: 0;
-  font-size: clamp(1.25rem, 2vw, 1.8rem);
-  font-weight: 800;
-  letter-spacing: .2px;
-  color: color-mix(in oklab, var(--accent) 88%, white 12%);
-  text-shadow: 0 0 18px color-mix(in oklab, var(--accent) 45%, transparent 55%);
-}
-
-/* Subtítulo opcional (HTML melhorado que sugeri) */
-.site-subtitle { margin: 0; color: var(--ink-weak); font-weight: 600; }
-
-/* Skip link acessível */
-.skip-to-content{
-  position: absolute; left: -9999px; top: auto; width: 1px; height:1px; overflow:hidden;
-}
-.skip-to-content:focus{
-  left: var(--sp-3); top: var(--sp-3); width:auto; height:auto; padding:.6rem 1rem;
-  background: var(--surface); color: var(--primary); border-radius: var(--radius-sm);
-  box-shadow: var(--glow);
-}
-
-/* =========================================================
-   Main container
-   ========================================================= */
-main, .container {
-  flex: 1;
-  width: 100%;
-  max-width: 1024px;
-  margin: var(--sp-5) auto;
-  padding: clamp(1rem, 2vw, 2rem);
-  background: linear-gradient(180deg, var(--surface), var(--surface-2));
-  border: 1px solid var(--border);
-  border-radius: var(--radius);
-  box-shadow: var(--shadow-2);
-}
-
-h2 {
-  text-align: center;
-  margin: 0 0 var(--sp-4);
-  color: var(--primary);
-  font-weight: 800;
-  letter-spacing: .3px;
-}
-
-/* Texto auxiliar opcional */
+/* Texto auxiliar (se estiver usando) */
 .helper-text{
-  text-align: center;
-  margin: -0.75rem 0 var(--sp-4);
-  color: var(--ink-weak);
-  font-weight: 600;
+  text-align:center; margin:-.5rem 0 var(--sp-4); color:var(--ink-weak); font-weight:600;
 }
 
 /* =========================================================
-   Mesa de cartas — agora em GRID responsivo
+   Mesa de cartas — GRID fluido
    ========================================================= */
-#mesa {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(110px, 1fr));
-  gap: clamp(.75rem, 1.6vw, 1rem);
-  justify-items: center;
-  align-items: stretch;
-  margin-bottom: var(--sp-4);
-  perspective: 1200px;
+#mesa{
+  display:grid;
+  grid-template-columns: repeat(auto-fit, minmax(110px,1fr));
+  gap:clamp(.75rem,1.6vw,1rem);
+  justify-items:center; align-items:stretch;
+  margin-bottom:var(--sp-4);
+  perspective:1200px;
 }
 
-/* Carta — 3D polido, acessível e responsivo */
-.carta {
-  width: 100%;
-  max-width: 140px;
-  aspect-ratio: 5 / 7; /* 100x140 */
-  cursor: pointer;
-  border-radius: var(--radius-sm);
-  box-shadow: var(--shadow-1);
-  position: relative;
-  transform-style: preserve-3d;
-  transition: transform var(--dur) var(--easing), box-shadow var(--dur) var(--easing), filter var(--dur) var(--easing);
-  will-change: transform, box-shadow, filter;
-  outline: none;
-  background: transparent;
+/* Carta */
+.carta{
+  width:100%; max-width:150px; aspect-ratio:5/7;
+  position:relative; cursor:pointer; border-radius:var(--radius-sm);
+  transform-style:preserve-3d; will-change:transform, box-shadow, filter;
+  transition:transform var(--dur-2) var(--ease), box-shadow var(--dur-2) var(--ease), filter var(--dur-2) var(--ease);
+  outline:none; background:transparent;
+  box-shadow:0 3px 10px rgba(90,61,154,.18);
 }
-.carta:hover {
-  transform: translateY(-3px) rotateX(2deg) rotateY(-2deg);
-  box-shadow: 0 14px 30px var(--sombra-roxo);
-  filter: saturate(1.02);
+@media (hover:hover){
+  .carta:hover{ transform:translateY(-3px) rotateX(2deg) rotateY(-2deg); filter:saturate(1.03) }
 }
-.carta:active { transform: translateY(0) scale(.98); }
-.carta:focus-visible {
-  box-shadow: var(--glow), 0 10px 26px var(--sombra-roxo);
-}
+.carta:active{ transform:translateY(0) scale(.98) }
+.carta:focus-visible{ box-shadow:var(--glow), 0 10px 26px rgba(90,61,154,.28) }
 
-/* Núcleo da animação de flip */
-.carta-inner {
-  position: relative;
-  inset: 0;
-  width: 100%; height: 100%;
-  transform-style: preserve-3d;
-  transition: transform var(--dur-slow) var(--easing);
-  border-radius: inherit;
+/* Núcleo do flip */
+.carta-inner{
+  position:absolute; inset:0; border-radius:inherit;
+  transform-style:preserve-3d;
+  transition:transform var(--dur-3) var(--ease);
 }
-
-.carta.virada .carta-inner { transform: rotateY(180deg); }
+.carta.virada .carta-inner{ transform:rotateY(180deg) }
 
 /* Faces */
-.carta-frente, .carta-verso {
-  position: absolute;
-  inset: 0;
-  border-radius: inherit;
-  backface-visibility: hidden;
-  display: grid; place-items: center;
-  font-weight: 700;
-  padding: .6rem;
-  border: 1px solid var(--border);
-  box-shadow: inset 0 0 0 1px color-mix(in oklab, var(--primary) 10%, transparent 90%),
-              inset 0 0 18px color-mix(in oklab, var(--accent) 20%, transparent 80%),
-              0 1px 0 color-mix(in oklab, #fff 70%, transparent 30%);
+.carta-frente,.carta-verso{
+  position:absolute; inset:0; display:grid; place-items:center;
+  border-radius:inherit; backface-visibility:hidden; padding:.6rem;
+  border:1px solid var(--border);
+  box-shadow: inset 0 0 0 1px color-mix(in oklab, var(--roxo-escuro) 10%, transparent 90%),
+              inset 0 0 18px color-mix(in oklab, var(--dourado) 18%, transparent 82%),
+              0 1px 0 #fff6;
 }
 
-/* Frente revelada */
-.carta-frente {
+/* Frente (revelada) */
+.carta-frente{
   background:
     radial-gradient(140% 90% at 100% 0%, color-mix(in oklab, var(--lilas-bem-claro) 80%, white 20%), transparent 70%),
     linear-gradient(180deg, color-mix(in oklab, #fff 85%, var(--lilas-bem-claro) 15%), #fff);
-  color: var(--primary);
-  transform: rotateY(180deg);
-  text-align: center;
-  text-shadow: 0 0 10px color-mix(in oklab, var(--accent) 35%, transparent 65%);
-  font-size: clamp(.95rem, 1.4vw, 1.05rem);
+  color:var(--roxo-escuro);
+  transform:rotateY(180deg);
+  text-align:center; font-weight:800;
+  text-shadow:0 0 10px color-mix(in oklab, var(--dourado) 32%, transparent 68%);
+  font-size:clamp(.95rem,1.4vw,1.06rem);
 }
 
-/* Verso (carta fechada) */
-.carta-verso {
+/* Verso (fechada) */
+.carta-verso{
   background:
-    conic-gradient(from 45deg at 50% 50%, color-mix(in oklab, var(--primary) 78%, #000 0%) 0 25%,
-                   color-mix(in oklab, var(--primary-700) 78%, #000 0%) 0 50%,
-                   color-mix(in oklab, var(--primary) 78%, #000 0%) 0 75%,
-                   color-mix(in oklab, var(--primary-700) 78%, #000 0%) 0 100%),
-    radial-gradient(80% 60% at 50% 30%, color-mix(in oklab, var(--accent) 20%, transparent 80%), transparent 60%);
-  color: var(--accent);
-  font-size: clamp(1.6rem, 3.6vw, 2.4rem);
-  letter-spacing: 1px;
+    conic-gradient(from 45deg at 50% 50%, color-mix(in oklab, var(--roxo-escuro) 78%, #000 0%) 0 25%,
+                   color-mix(in oklab, var(--roxo-700) 78%, #000 0%) 0 50%,
+                   color-mix(in oklab, var(--roxo-escuro) 78%, #000 0%) 0 75%,
+                   color-mix(in oklab, var(--roxo-700) 78%, #000 0%) 0 100%),
+    radial-gradient(80% 60% at 50% 30%, color-mix(in oklab, var(--dourado) 22%, transparent 78%), transparent 60%);
+  color:var(--dourado);
+  font-size:clamp(1.6rem,3.6vw,2.4rem); letter-spacing:1px;
+}
+@media (hover:hover){
+  .carta:hover .carta-verso::after{
+    content:""; position:absolute; inset:0; border-radius:inherit;
+    background:linear-gradient(120deg, transparent 30%, color-mix(in oklab, #fff 60%, var(--dourado) 40%) 45%, transparent 60%);
+    mix-blend-mode:overlay; opacity:.35; transition:opacity var(--dur-2) var(--ease);
+  }
 }
 
-/* Efeito de brilho sutil no hover */
-.carta:hover .carta-verso::after {
-  content: "";
-  position: absolute; inset: 0;
-  border-radius: inherit;
-  background: linear-gradient(120deg, transparent 30%, color-mix(in oklab, #fff 60%, var(--accent) 40%) 45%, transparent 60%);
-  mix-blend-mode: overlay;
-  opacity: .35;
-  transition: opacity var(--dur) var(--easing);
+/* Estados avançados */
+.carta.selecionada{
+  box-shadow:0 12px 30px rgba(217,187,74,.35);
+  animation:pulse 1.2s var(--ease) 1;
 }
-
-/* =========================================================
-   Resultado — cartão com destaque e animação de entrada
-   ========================================================= */
-#resultado {
-  background: linear-gradient(180deg, var(--surface), var(--surface-2));
-  border: 1px solid var(--border);
-  border-radius: var(--radius-sm);
-  padding: var(--sp-4);
-  box-shadow: var(--shadow-1);
-  max-width: min(720px, 100%);
-  margin: 0 auto;
-  color: var(--ink);
-  font-weight: 550;
-  animation: fadeInUp var(--dur-slow) var(--easing) both;
+.carta.desabilitada{
+  pointer-events:none;
+  filter:grayscale(.5) contrast(.9) opacity(.7);
 }
-#resultado h3 {
-  margin: 0 0 var(--sp-2);
-  color: var(--primary);
-  font-weight: 800;
-  text-align: center;
-  text-shadow: 0 0 12px color-mix(in oklab, var(--accent) 30%, transparent 70%);
-}
-#resultado p { margin: .45rem 0; line-height: 1.6; }
-
-/* =========================================================
-   Botão Reiniciar — estilo premium com estados
-   ========================================================= */
-#btn-reiniciar {
-  display: block;
-  margin: var(--sp-4) auto var(--sp-5);
-  padding: .8rem 1.4rem;
-  background:
-    linear-gradient(180deg, color-mix(in oklab, var(--accent) 90%, white 10%),
-                           color-mix(in oklab, var(--accent-600) 90%, white 10%));
-  color: #3a2c0a;
-  font-size: 1.05rem;
-  border: none;
-  border-radius: 999px;
-  cursor: pointer;
-  font-weight: 800;
-  letter-spacing: .3px;
-  box-shadow: 0 8px 24px var(--sombra-dourado);
-  transition: transform var(--dur) var(--easing), box-shadow var(--dur) var(--easing), filter var(--dur) var(--easing);
-}
-#btn-reiniciar:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 14px 32px var(--sombra-dourado);
-  filter: brightness(1.02);
-}
-#btn-reiniciar:active { transform: translateY(0) scale(.98); }
-#btn-reiniciar:focus-visible { outline: none; box-shadow: var(--glow), 0 8px 24px var(--sombra-dourado); }
-
-/* Quando está oculto pelo JS, mantenha acessível para leitores se necessário */
-#btn-reiniciar[style*="display:none"] { visibility: hidden; }
-
-/* =========================================================
-   Footer — discreto e elegante
-   ========================================================= */
-footer {
-  background: color-mix(in oklab, var(--primary) 18%, #ffffff 82%);
-  color: color-mix(in oklab, var(--ink) 80%, #000 20%);
-  text-align: center;
-  padding: var(--sp-3);
-  font-size: .95rem;
-  font-weight: 700;
-  border-top: 1px solid var(--border);
-  box-shadow: inset 0 1px 0 #ffffff40;
+@keyframes pulse{
+  0%{ box-shadow:0 0 0 0 rgba(217,187,74,.5) }
+  100%{ box-shadow:0 0 0 12px rgba(217,187,74,0) }
 }
 
 /* =========================================================
-   Utilitários
+   Resultado
    ========================================================= */
-.visually-hidden {
-  position: absolute !important;
-  height: 1px; width: 1px;
-  overflow: hidden; clip: rect(1px, 1px, 1px, 1px);
-  white-space: nowrap; clip-path: inset(50%); border: 0; padding: 0; margin: -1px;
+#resultado{
+  background:linear-gradient(180deg,#ffffffcc,#ffffffb3);
+  border:1px solid var(--border);
+  border-radius:var(--radius-sm);
+  padding:var(--sp-4);
+  box-shadow:var(--shadow);
+  max-width:min(760px,100%);
+  margin:0 auto;
+  color:var(--ink); font-weight:560;
+  animation:fadeInUp var(--dur-3) var(--ease) both;
 }
-
-/* Seleção de texto personalizada */
-::selection { background: color-mix(in oklab, var(--accent) 40%, #000 60%); color: white; }
-
-/* Animações */
-@keyframes fadeInUp {
-  from { opacity: 0; transform: translateY(8px); }
-  to   { opacity: 1; transform: translateY(0); }
+#resultado h3{
+  margin:0 0 var(--sp-2); text-align:center;
+  color:var(--roxo-escuro); font-weight:900;
+  text-shadow:0 0 12px color-mix(in oklab, var(--dourado) 30%, transparent 70%);
 }
+#resultado p{ margin:.5rem 0; line-height:1.6 }
 
 /* =========================================================
-   Compat — mantém estilos legados que você já tinha
-   (Ajustados para combinar com o novo visual)
+   Botão Reiniciar
    ========================================================= */
-h1 { align-items: center; }
-h2 { color: var(--primary); }
-.carta:hover { box-shadow: 0 14px 30px var(--sombra-roxo); }
-.carta-frente, .carta-verso { box-shadow: inset 0 0 10px var(--sombra-dourado); }
+#btn-reiniciar{
+  display:block;
+  margin:var(--sp-4) auto var(--sp-5);
+  padding:.9rem 1.5rem;
+  background:linear-gradient(180deg, color-mix(in oklab, var(--dourado) 90%, white 10%),
+                                     color-mix(in oklab, var(--dourado-600) 90%, white 10%));
+  color:#3a2c0a; font-size:1.05rem; border:none; border-radius:999px; cursor:pointer;
+  font-weight:900; letter-spacing:.3px;
+  box-shadow:0 10px 28px rgba(217,187,74,.45);
+  transition:transform var(--dur-2) var(--ease), box-shadow var(--dur-2) var(--ease), filter var(--dur-2) var(--ease);
+}
+#btn-reiniciar:hover{ transform:translateY(-2px); box-shadow:0 16px 36px rgba(217,187,74,.5); filter:brightness(1.02) }
+#btn-reiniciar:active{ transform:translateY(0) scale(.98) }
+#btn-reiniciar:focus-visible{ outline:none; box-shadow:var(--glow), 0 10px 28px rgba(217,187,74,.45) }
 
-/* Melhora contraste no tema claro original */
-body:not(:has(main)), body:has(main) { color: var(--ink); }
+/* Footer opcional */
+footer{
+  text-align:center; padding:var(--sp-3);
+  color:color-mix(in oklab, var(--ink) 85%, #000 15%);
+  font-weight:700; border-top:1px solid var(--border);
+}
+
+/* Animações utilitárias */
+@keyframes fadeInUp{
+  from{opacity:0; transform:translateY(8px)}
+  to{opacity:1; transform:translateY(0)}
+}
