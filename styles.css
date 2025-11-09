@@ -166,6 +166,82 @@ body{
   font-size:2rem;
 }
 
+/* ===== Seletor de Tema (Amor/Trabalho/Saúde) ===== */
+.filtro-tema{
+  margin-top:.8rem;
+  display:inline-flex;
+  align-items:center;
+  gap:.6rem;
+  padding:.5rem .6rem;
+  border-radius:999px;
+  background:var(--glass);
+  border:1px solid var(--border);
+  box-shadow:0 6px 18px rgba(0,0,0,.08);
+}
+
+.filtro-tema .helper-text{
+  margin:0;
+  font-size:.95rem;
+  color:var(--muted);
+}
+
+/* Select “pill” */
+.select{
+  appearance:none;
+  -webkit-appearance:none;
+  -moz-appearance:none;
+  background:var(--panel);
+  color:var(--text);
+  border:1px solid var(--border);
+  border-radius:999px;
+  padding:.55rem 2.2rem .55rem .9rem;
+  font-weight:600;
+  line-height:1;
+  box-shadow:0 6px 18px rgba(0,0,0,.06);
+  cursor:pointer;
+  transition:box-shadow .2s ease, transform .06s ease, border-color .2s ease;
+  position:relative;
+}
+
+/* Seta do select via pseudo-elemento */
+.select{
+  background-image:
+    linear-gradient(45deg, var(--muted) 50%, transparent 50%),
+    linear-gradient(-45deg, var(--muted) 50%, transparent 50%),
+    linear-gradient(to right, transparent, transparent);
+  background-position:
+    calc(100% - 1.05rem) calc(50% - 2px),
+    calc(100% - 0.75rem) calc(50% - 2px),
+    0 0;
+  background-size: 6px 6px, 6px 6px, 100% 100%;
+  background-repeat:no-repeat;
+}
+
+.select:hover{ transform:translateY(-1px); }
+.select:focus{
+  outline:3px solid var(--ring);
+  outline-offset:2px;
+}
+.select:active{ transform:translateY(0); }
+
+/* Acessível em telas menores */
+@media (max-width:560px){
+  .filtro-tema{
+    display:flex;
+    width:100%;
+    justify-content:space-between;
+    padding:.5rem .75rem;
+  }
+  .filtro-tema .helper-text{ font-size:.95rem; }
+  .select{ flex:0 1 auto; max-width:60%; }
+}
+
+/* Alto contraste quando [data-theme="dark"] (já usa tokens globais) */
+:root[data-theme="dark"] .filtro-tema{
+  box-shadow:0 10px 24px rgba(0,0,0,.28);
+}
+
+
 /* — Estado revelado — */
 .carta.virada .carta-inner{ transform:rotateY(180deg); }
 
