@@ -168,8 +168,7 @@ body{
 
 /* — Estado revelado — */
 .carta.virada .carta-inner{ transform:rotateY(180deg); }
-.carta.virada .carta-frente{ /* já estará voltada para o usuário */ }
-.carta.virada .carta-verso{  /* fica no verso */ }
+
 
 /* Imagens/ícones dentro da frente */
 .carta-frente .image{
