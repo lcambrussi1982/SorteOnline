@@ -1,3 +1,5 @@
+/* ===== SorteOnline + JSON-LD (Cambrussi Systems) ===== */
+
 const mesa = document.getElementById("mesa");
 const resultado = document.getElementById("resultado");
 const btnReiniciar = document.getElementById("btn-reiniciar");
@@ -15,9 +17,8 @@ function embaralhar(array) {
   return a;
 }
 
-/* Anuncia mensagens em aria-live */
+/* Acessibilidade: anunciar mensagens */
 function anunciar(msg) {
-  // limpar para forçar re-leitura
   resultado.setAttribute("aria-live", "polite");
   resultado.setAttribute("aria-atomic", "true");
   const div = document.createElement("div");
@@ -35,23 +36,26 @@ function criarMesa() {
   btnReiniciar.hidden = true;
   btnReiniciar.style.display = "none";
 
+  // 'baralho' deve existir no escopo (ex.: vindo de baralho.js)
   baralhoAtual = embaralhar([...baralho]);
 
   baralhoAtual.forEach((carta, index) => {
     const cartaContainer = document.createElement("div");
     cartaContainer.className = "carta";
     cartaContainer.dataset.index = String(index);
-    cartaContainer.tabIndex = 0; // acessível
+    cartaContainer.tabIndex = 0;
     cartaContainer.setAttribute("role", "button");
     cartaContainer.setAttribute("aria-pressed", "false");
-    cartaContainer.setAttribute("aria-label", `Carta ${index + 1}, virada`); // atualizado ao virar
+    cartaContainer.setAttribute("aria-label", `Carta ${index + 1}, virada`);
 
     const cartaInner = document.createElement("div");
     cartaInner.className = "carta-inner";
 
     const frente = document.createElement("div");
     frente.className = "carta-frente";
-    frente.innerHTML = `<strong>${carta.nome}</strong>`;
+    frente.innerHTML = `
+      <strong class="label">${carta.nome}</strong>
+    `;
 
     const verso = document.createElement("div");
     verso.className = "carta-verso";
@@ -64,18 +68,15 @@ function criarMesa() {
     function toggleSelecao() {
       const jaVirada = cartaContainer.classList.contains("virada");
 
-      // Se já terminou (3 cartas), ignore
       if (cartasEscolhidas.length === 3 && !jaVirada) return;
 
       if (!jaVirada) {
-        // selecionar
         cartaContainer.classList.add("virada", "selecionada");
         cartaContainer.setAttribute("aria-pressed", "true");
         cartaContainer.setAttribute("aria-label", `${carta.nome}, revelada`);
         cartasEscolhidas.push({ ...carta, idx: index });
         anunciar(`Carta selecionada: ${carta.nome}`);
       } else {
-        // permitir DESSELECIONAR enquanto < 3
         if (cartasEscolhidas.length < 3) {
           cartaContainer.classList.remove("virada", "selecionada");
           cartaContainer.setAttribute("aria-pressed", "false");
@@ -102,7 +103,6 @@ function criarMesa() {
         ev.preventDefault();
         toggleSelecao();
       }
-      // Navegação com setinhas (opcional)
       if (["ArrowRight","ArrowLeft","ArrowDown","ArrowUp"].includes(ev.key)) {
         ev.preventDefault();
         moverFoco(ev.key, cartaContainer);
@@ -132,12 +132,11 @@ function mostrarResultado() {
     `<p><strong>Carta ${idx + 1} — ${c.nome}:</strong> ${c.significado}</p>`
   ).join("");
   resultado.innerHTML = `<h3>Sua Leitura:</h3>${parts}`;
-  // Acessibilidade: força leitura do bloco
   resultado.tabIndex = -1;
   resultado.focus({ preventScroll: true });
 }
 
-/* Desabilita cartas não selecionadas por classe (CSS cuida do estilo) */
+/* Desabilita cartas não selecionadas */
 function bloquearNaoSelecionadas() {
   const cards = document.querySelectorAll(".carta");
   cards.forEach(card => {
@@ -151,8 +150,51 @@ function bloquearNaoSelecionadas() {
   });
 }
 
+/* ===== JSON-LD (Schema.org) ===== */
+function injetarJsonLd() {
+  // Monte URLs automaticamente a partir da página atual
+  const pageUrl = location.href.split("#")[0];
+  const siteUrl = location.origin;
+  const logoUrl = new URL("logo.png", pageUrl).toString();
+
+  const jsonld = {
+    "@context": "https://schema.org",
+    "@graph": [
+      {
+        "@type": "WebSite",
+        "name": "Cambrussi Systems — Leitura do Baralho Cigano",
+        "url": pageUrl,
+        "inLanguage": "pt-BR",
+        "publisher": { "@id": "#org" }
+      },
+      {
+        "@type": "Organization",
+        "@id": "#org",
+        "name": "Cambrussi Systems",
+        "logo": { "@type": "ImageObject", "url": logoUrl },
+        "url": siteUrl
+      },
+      {
+        "@type": "Person",
+        "name": "Astrólogo Leandro",
+        "jobTitle": "Astrólogo",
+        "image": logoUrl,
+        "url": siteUrl + "/astrologo-leandro"
+      }
+    ]
+  };
+
+  const tag = document.createElement("script");
+  tag.type = "application/ld+json";
+  tag.text = JSON.stringify(jsonld);
+  document.head.appendChild(tag);
+}
+
 /* Reiniciar */
 btnReiniciar.addEventListener("click", criarMesa);
 
 /* Boot */
-document.addEventListener("DOMContentLoaded", criarMesa);
+document.addEventListener("DOMContentLoaded", () => {
+  criarMesa();
+  injetarJsonLd();
+});
